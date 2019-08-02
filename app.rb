@@ -21,3 +21,59 @@ end
 get ('/new_project') do
   erb(:new_project)
 end
+
+get ('/volunteers') do
+  redirect to('/')
+end
+
+get ('/volunteers/:id') do
+  @volunteer = Volunteer.find(params[:id].to_i())
+  erb(:volunteer)
+end
+
+get ('/projects') do
+  redirect to('/')
+end
+
+get ('/projects/:id') do
+  @project = Project.find(params[:id].to_i())
+  @volunteers_by_name = @project.volunteers_by_name
+  @volunteers_picked = @project.volunteers_picked
+  erb(:project)
+end
+
+post ('/volunteers') do
+  name = params[:name]
+  age = params[:age]
+  project_id = params[:project_id]
+  volunteer = Volunteer.new({:name => name, :age => age, :project_id => project_id, :id => nil})
+  volunteer.save
+  redirect to('/')
+end
+
+post ('/projects') do
+  title = params[:title]
+  project = Project.new({:title => title, :id => nil})
+  project.save
+  redirect to ('/')
+end
+
+delete ('/volunteers/:id') do
+  volunteer = Volunteer.find(params[:id].to_i)
+  volunteer.delete
+  redirect to('/')
+end
+
+delete ('/projects/:id') do
+  project = Project.find(params[:id].to_i)
+  project.delete
+  redirect to('/')
+end
+
+patch ('/projects/:project_id/pick/:volunteer_id') do
+  project = params[:project_id].to_i()
+  @project = Project.find(project)
+  @project.pick(params[:volunteer_id].to_i)
+  @project.volunteers_by_name
+  redirect to("/projects/#{project}")
+end
