@@ -1,1 +1,9 @@
-
+<h3><%= @volunteer.name %></h3>
+<h4>Age: <%= @volunteer.age%></h4>
+<h4>Project_id: <%= @volunteer.project_id %></h4>
+<h4>ID: <%= @volunteer.id %></h4>
+<form class="" action="/volunteers/<%= @volunteer.id %>" method="post">
+  <input name="_method" type="hidden" value="delete">
+  <button type="submit" name="button">Delete</button>
+</form>
+<a href="/">Back to home</a>

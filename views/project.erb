@@ -1,1 +1,31 @@
-
+<h3><%= @project.title %></h3>
+<h4>Volunteer:</h4> <%= @project.volunteer %>
+<form class="" action="/projects/<%= @project2.id %>" method="post">
+  <input name="_method" type="hidden" value="delete">
+  <button type="submit" name="button">Delete</button>
+</form>
+<h4>Volunteers/h4>
+<% if @volunteers_by_name.any? %>
+  <ul>
+    <% @avolunteers_by_name.each do |volunteer| %>
+      <li><a href="/volunteers/<%= volunteer.id %>"><%= volunteer.name %></a></li>
+      <form class="" action="/projects/<%= @project.id %>/pick/<%= volunteer.id %>" method="post">
+        <input name="_method" type="hidden" value="patch">
+        <button type="submit" name="button">Pick</button>
+      </form>
+    <% end %>
+  </ul>
+<% else %>
+  <p>There are currently no projects to display.</p>
+<% end %>
+<h4>Volunteers to pick</h4>
+<% if @volunteers_picked.any? %>
+  <ul>
+    <% @volunteers_picked.each do |volunteer| %>
+      <li><a href="/volunteers/<%= volunteer.id %>"><%= volunteer.name %></a></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p><%= @project.title %> hasn't picked any volunteers.</p>
+<% end %>
+<a href="/">Back to home</a>
