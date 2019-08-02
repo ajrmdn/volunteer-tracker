@@ -13,3 +13,7 @@ get ('/') do
   @volunteers = Volunteer.all
   erb(:index)
 end
+
+get ('/new_volunteer') do
+  erb(:new_volunteer)
+end
