@@ -1,4 +1,3 @@
-
 require "volunteer"
 require "project"
 require "rspec"
