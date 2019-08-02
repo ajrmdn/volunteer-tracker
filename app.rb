@@ -17,3 +17,7 @@ end
 get ('/new_volunteer') do
   erb(:new_volunteer)
 end
+
+get ('/new_project') do
+  erb(:new_project)
+end
