@@ -46,4 +46,16 @@ class Volunteer
   def delete
     DB.exec("DELETE FROM volunteers WHERE id = #{@id};")
   end
+
+  def save
+    result = DB.exec("INSERT INTO volunteers (name, age, project_id) VALUES ('#{@name}', '#{@age}',#{@project_id}) RETURNING id;")
+    @id = result.first().fetch("id").to_i
+  end
+
+  def update(attributes)
+    (attributes.key? :name) ? @name = attributes.fetch(:name) : @name = @name
+    (attributes.key? :age) ? @age = attributes.fetch(:age) : @age = @age
+    DB.exec("UPDATE volunteers SET name = '#{@name}' WHERE id = #{@id};")
+    DB.exec("UPDATE volunteers SET age = '#{@age}' WHERE id = #{@id};")
+  end
 end
