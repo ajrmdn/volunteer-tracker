@@ -1,1 +1,9 @@
+<h3><%= @project.name %></h3>
+<h4>Name:</h4> <%= @project.name %>
 
+<form class="" action="/project/<%= @project.id %>" method="post">
+  <input name="_method" type="hidden" value="delete">
+  <button type="submit" name="button">Delete</button>
+</form>
+
+<a href="/">Back to home</a>
