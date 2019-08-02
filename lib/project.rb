@@ -1,5 +1,5 @@
 class Project
-  attr_accessor :title
+  attr_accessor :title, :volunteer_id
   attr_reader :id
 
   def initialize(attributes)
@@ -67,5 +67,21 @@ class Project
     DB.exec("UPDATE volunteers SET project_id = (#{self.id}) WHERE id = (#{volunteer_id})")
   end
 
-  
+  def volunteers_picked
+    returned = DB.exec("SELECT * FROM volunteerss where project_id = #{self.id}")
+    volunteers = []
+    returned.each() do |volunteer|
+      name = volunteer.fetch("name")
+      age = volunteer.fetch("age")
+      id = volunteer.fetch("id").to_i
+      project_id = volunteer.fetch("project_id").to_i
+      volunteers.push(Volunteer.new({:name => name, :age => age, :project_id => project_id, :id => id}))
+    end
+    volunteers
+  end
+
+  def update(attributes)
+    (attributes.key? :title) ? @title = attributes.fetch(:title) : @title = @title
+    DB.exec("UPDATE projects SET name = '#{@name}' WHERE id = #{@id};")
+  end
 end
