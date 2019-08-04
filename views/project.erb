@@ -1,12 +1,11 @@
-<h3><%= @project.title %></h3>
+<h3><a href="/project/<%= @project.id %>/edit"><%= @project.title %></a></h3>
+
 <h4>Volunteers</h4>
 <% if @volunteers.any? %>
   <ul>
-    <% @avolunteers.each do |volunteer| %>
+    <% @volunteers.each do |volunteer| %>
       <li><a href="/volunteers/<%= volunteer.id %>"><%= volunteer.name %></a></li>
       <form class="" action="/projects/<%= @project.id %>/pick/<%= volunteer.id %>" method="post">
-        <input name="_method" type="hidden" value="patch">
-        <button type="submit" name="button">Pick</button>
       </form>
     <% end %>
   </ul>
