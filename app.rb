@@ -66,7 +66,6 @@ end
 
 get ('/project/:id/edit') do
   @project = Project.find(params[:id].to_i())
-
   erb(:project_edit)
 end
 
@@ -82,10 +81,14 @@ delete ('/project/:id') do
   redirect to('/')
 end
 
-patch ('/projects/:project_id/pick/:volunteer_id') do
-  project = params[:project_id].to_i()
-  @project = Project.find(project)
-  @project.pick(params[:volunteer_id].to_i)
-  @project.volunteers_by_name
-  redirect to("/projects/#{project}")
+patch ('/project/:id/edit') do
+  @project = Project.find(params[:id].to_i())
+  @project.update(:title => params[:title])
+  redirect to ("/project/#{@project.id}")
+end
+
+patch ('/volunteer/:id') do
+  @volunteer = Volunteer.find(params[:id].to_i())
+  @volunteer.update(:name => params[:name])
+  redirect to ("/volunteers/#{@volunteer.id}")
 end
