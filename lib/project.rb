@@ -1,5 +1,7 @@
+require('./lib/volunteer')
+
 class Project
-  attr_accessor :title, :volunteer_id
+  attr_accessor :title
   attr_reader :id
 
   def initialize(attributes)
@@ -8,7 +10,7 @@ class Project
   end
 
   def self.all
-    returned = DB.exec("SELECT * FROM project ORDER BY name;")
+    returned = DB.exec("SELECT * FROM projects;")
     projects = []
     returned.each() do |project|
       name = project.fetch("title")
@@ -46,12 +48,11 @@ class Project
     @id = result.first().fetch("id").to_i
   end
 
-  def volunteers_by_name
-    returned = DB.exec("SELECT * FROM volunteers WHERE lower(type) = '#{@project_id.downcase}'")
+  def volunteers_by_project
+    returned = DB.exec("SELECT * FROM volunteers WHERE id = (#{@project_id})")
     volunteers = []
     returned.each() do |volunteer|
       name = volunteer.fetch("name")
-      age = volunteer.fetch("age")
       project_id = volunteer.fetch("project_id")
       id = volunteer.fetch("id").to_i
       project_id = volunteer.fetch("project_id").to_i
@@ -67,21 +68,24 @@ class Project
     DB.exec("UPDATE volunteers SET project_id = (#{self.id}) WHERE id = (#{volunteer_id})")
   end
 
-  def volunteers_picked
-    returned = DB.exec("SELECT * FROM volunteerss where project_id = #{self.id}")
-    volunteers = []
-    returned.each() do |volunteer|
-      name = volunteer.fetch("name")
-      age = volunteer.fetch("age")
-      id = volunteer.fetch("id").to_i
-      project_id = volunteer.fetch("project_id").to_i
-      volunteers.push(Volunteer.new({:name => name, :age => age, :project_id => project_id, :id => id}))
-    end
-    volunteers
-  end
+  # def volunteers_picked
+  #   returned = DB.exec("SELECT * FROM volunteerss where project_id = #{self.id}")
+  #   volunteers = []
+  #   returned.each() do |volunteer|
+  #     name = volunteer.fetch("name")
+  #     id = volunteer.fetch("id").to_i
+  #     project_id = volunteer.fetch("project_id").to_i
+  #     volunteers.push(Volunteer.new({:name => name, :age => age, :project_id => project_id, :id => id}))
+  #   end
+  #   volunteers
+  # end
 
   def update(attributes)
     (attributes.key? :title) ? @title = attributes.fetch(:title) : @title = @title
-    DB.exec("UPDATE projects SET name = '#{@name}' WHERE id = #{@id};")
+    DB.exec("UPDATE projects SET title = '#{@title}' WHERE id = #{@id};")
+  end
+
+  def volunteers
+    Volunteer.find_by_project(self.id)
   end
 end
